@@ -1,8 +1,10 @@
 // based on adafruit and sparkfun libraries
 
 #include <string.h> // for memset
+#include <stdio.h>
 #include <xc.h> // for the core timer delay
 #include "ssd1306.h"
+#include "font.h"
 
 unsigned char ssd1306_write = 0b01111000; // i2c address
 unsigned char ssd1306_read = 0b01111001; // i2c address
@@ -86,4 +88,27 @@ void ssd1306_drawPixel(unsigned char x, unsigned char y, unsigned char color) {
 // zero every pixel value
 void ssd1306_clear() {
     memset(ssd1306_buffer, 0, 512); // make every bit a 0, memset in string.h
+}
+
+void ssd_char(unsigned char x, unsigned char y, unsigned char mes){
+    unsigned char j,k;
+    for (j=0; j<5; j++){
+        for (k=0;k<8;k++){
+            if (((ASCII[mes-32][j])>>k)&1 == 1){
+                ssd1306_drawPixel(j+x,y+k,0x01);
+            }
+            else {
+                ssd1306_drawPixel(x+j,y+k,0x00);
+            }
+        }
+    }
+}
+unsigned char ssd_speak(unsigned char x, unsigned char y, unsigned char *mes){
+    int s=0,i=0;
+    while(mes[s] !=0){
+        ssd_char(x+i,y,mes[s]);
+        s=s+1;
+        i=i+6;
+    }   
+    ssd1306_update();
 }
