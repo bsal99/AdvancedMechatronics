@@ -70,7 +70,7 @@ int main(){
         
         sprintf(mes,"my var = %d",lol);
         ssd_speak(1,1,&mes);
-        ssd_speak(1,10,&frame);
+        ssd_speak(1,20,&frame);
         ssd1306_update();
         t1 = _CP0_GET_COUNT();
         sprintf(frame,"fps = %d",24000000/(t1-t0));
